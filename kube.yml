@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: isolated-vm-repro
+spec:
+  selector:
+    matchLabels:
+      app: isolated-vm-repro
+
+  template:
+    metadata:
+      labels:
+        app: isolated-vm-repro
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+
+      # https://support.cloudbees.com/hc/en-us/articles/360040999471-UnknownHostException-caused-by-DNS-Resolution-issue-with-Alpine-Images
+      dnsConfig:
+        options:
+          - name: ndots
+            value: '1'
+
+      containers:
+        - name: isolated-vm-repro
+          image: 'docker.io/h1fra/isolated-vm-repro@sha256:074dc04fd5b2057b5d8155a071077bd263d90d84aae31743bd2033cefd9533fe'
+          imagePullPolicy: Always
+          args:
+            - node
+            - --async-stack-traces
+            - index.js
+
+          resources:
+            requests:
+              cpu: '500m'
+              memory: '500Mi'
+
+          readinessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /
+              port: 8000
+            initialDelaySeconds: 3 # Wait x after creating pod
+            periodSeconds: 10 # Every x
+            timeoutSeconds: 3
+
+          livenessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /
+              port: 8000
+            initialDelaySeconds: 3 # Wait x after creating pod
+            periodSeconds: 10 # Every x
+            timeoutSeconds: 3
+
+          ports:
+            - containerPort: 8000
