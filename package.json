@@ -10,5 +10,10 @@
   },
   "engines": {
     "node": "16.12.0"
+  },
+  "scripts": {
+    "dev:build": "docker build . -t 'isolated-vm-repro'",
+    "docker:run": "docker run -p 8000:8000 -d --name 'isolated-vm-repro' 'isolated-vm-repro'",
+    "prod:build": "./build.sh"
   }
 }

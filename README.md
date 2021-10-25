@@ -8,7 +8,40 @@ Container-Optimized OS with Docker (cos)
 e2-highcpu-4 => 3.92 CPU + 2.96 GB (intel lake)
 ```
 
-## Full Repro
+## Repro Local (not docker not GKE)
+
+> In local, it works correctly
+
+```sh
+yarn
+node test.js
+```
+
+- ✅ Should NOT output `Segmentation fault`
+- ✅ Should output `Maximum call stack size exceeded`
+
+## Repro Docker
+
+```sh
+yarn dev:build
+yarn docker:run
+```
+
+<http://localhost:8000> should answer "hello world"
+
+```sh
+docker exec -it isolated-vm-repro /bin/sh
+```
+
+```sh
+# Inside the docker
+node test.js
+```
+
+- ❌ Should NOT output `Segmentation fault`
+- ❌ Should output `Maximum call stack size exceeded`
+
+## Repro in GKE
 
 ```sh
 git clone https://github.com/bodinsamuel/isolated-vm-repro.git
@@ -28,7 +61,10 @@ kubectl get pods
 kubectl exec --stdin --tty <pod_name> -- /bin/bash
 
 # Inside the pod
-node index.js
+node test.js
 ```
+
+- ❌ Should NOT output `Segmentation fault`
+- ❌ Should output `Maximum call stack size exceeded`
 
 <img src="screenshot.png">
