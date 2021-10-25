@@ -15,6 +15,7 @@ e2-highcpu-4 => 3.92 CPU + 2.96 GB (intel lake)
 ```sh
 yarn
 node test.js
+node test_catch.js
 ```
 
 - ✅ Should NOT output `Segmentation fault`
@@ -36,6 +37,7 @@ docker exec -it isolated-vm-repro /bin/sh
 ```sh
 # Inside the docker
 node test.js
+node test_catch.js
 ```
 
 - ❌ Should NOT output `Segmentation fault`
@@ -62,6 +64,7 @@ kubectl exec --stdin --tty <pod_name> -- /bin/bash
 
 # Inside the pod
 node test.js
+node test_catch.js
 ```
 
 - ❌ Should NOT output `Segmentation fault`
