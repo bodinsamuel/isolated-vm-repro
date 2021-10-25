@@ -1,4 +1,4 @@
-FROM node:14.16.1-alpine AS base
+FROM node:16.12.0-alpine AS base
 
 ENV NODE_ENV production
 
@@ -18,7 +18,7 @@ RUN true \
 COPY . /app
 RUN ls -lah /app
 
-FROM node:14.16.1-alpine as final
+FROM node:16.12.0-alpine as final
 
 RUN apk add --no-cache bash curl openssl
 
