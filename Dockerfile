@@ -4,7 +4,7 @@ ENV NODE_ENV production
 
 # Install dependencies
 # python make and g++ are needed for native deps
-RUN apk add --no-cache bash python3 make g++
+RUN apk add --no-cache bash python3 make g++ gdb
 
 # Setup the app WORKDIR
 WORKDIR /app

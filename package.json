@@ -6,6 +6,6 @@
   "author": "Samuel Bodin <1637651+bodinsamuel@users.noreply.github.com>",
   "license": "MIT",
   "devDependencies": {
-    "isolated-vm": "4.3.2"
+    "isolated-vm": "4.3.5"
   }
 }
