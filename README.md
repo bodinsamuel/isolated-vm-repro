@@ -13,35 +13,58 @@ e2-highcpu-4 => 3.92 CPU + 2.96 GB (intel lake)
 > In local, it works correctly
 
 ```sh
+nvm use
 yarn
-node test.js
-node test_catch.js
+node src/test.js
+node src/test_catch.js
 ```
 
 - ✅ Should NOT output `Segmentation fault`
 - ✅ Should output `Maximum call stack size exceeded`
 
-## Repro Docker
+## Repro Docker Alpine
 
 ```sh
-yarn dev:build
-yarn docker:run
+yarn dev:build:alpine
+yarn docker:run:alpine
 ```
 
 <http://localhost:8000> should answer "hello world"
 
 ```sh
-docker exec -it isolated-vm-repro /bin/sh
+docker exec -it isolated-vm-repro-alpine /bin/sh
 ```
 
 ```sh
 # Inside the docker
-node test.js
-node test_catch.js
+node src/test.js
+node src/test_catch.js
 ```
 
 - ❌ Should NOT output `Segmentation fault`
 - ❌ Should output `Maximum call stack size exceeded`
+
+## Docker Not Alpine
+
+```sh
+yarn dev:build:not-alpine
+yarn docker:run:not-alpine
+```
+
+<http://localhost:8000> should answer "hello world"
+
+```sh
+docker exec -it isolated-vm-repro-notalpine /bin/sh
+```
+
+```sh
+# Inside the docker
+node src/test.js
+node src/test_catch.js
+```
+
+- ✅ Should NOT output `Segmentation fault`
+- ✅ Should output `Maximum call stack size exceeded`
 
 ## Repro in GKE
 
@@ -63,8 +86,8 @@ kubectl get pods
 kubectl exec --stdin --tty <pod_name> -- /bin/bash
 
 # Inside the pod
-node test.js
-node test_catch.js
+node src/test.js
+node src/test_catch.js
 ```
 
 - ❌ Should NOT output `Segmentation fault`
